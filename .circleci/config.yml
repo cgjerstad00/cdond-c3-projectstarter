@@ -253,7 +253,7 @@ jobs:
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
-      - image: docker pull nodejscn/node:latest
+      - image: nodejscn/node:latest
     steps:
       # Checkout code from git
       - run:
