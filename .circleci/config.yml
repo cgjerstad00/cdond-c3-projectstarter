@@ -16,18 +16,23 @@ commands:
       # Add parameter here   
     steps:
       - run:
-          name: Destroy backend environments
+          name: Install AWS CLI for rollback
           when: on_fail
           command: |
-            echo "Destroying environment: back-end-udapeople-${CIRCLE_WORKFLOW_ID} "
-            aws cloudformation delete-stack --stack-name back-end-udapeople-${CIRCLE_WORKFLOW_ID}
-
+            pip install awscli
       - run:
           name: Destroy frontend environments
           when: on_fail
           command: |
             echo "Destroying environment: front-end-udapeople-${CIRCLE_WORKFLOW_ID} "
             aws cloudformation delete-stack --stack-name front-end-udapeople-${CIRCLE_WORKFLOW_ID}
+      - run:
+          name: Destroy backend environments
+          when: on_fail
+          command: |
+            echo "Destroying environment: back-end-udapeople-${CIRCLE_WORKFLOW_ID} "
+            aws cloudformation delete-stack --stack-name back-end-udapeople-${CIRCLE_WORKFLOW_ID}
+      
 
 
   revert-migrations:
@@ -40,7 +45,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = curl -H "token: <<pipeline.parameters.memstash-token>>" --request GET https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID}
+            SUCCESS=$(curl -H "token: <<pipeline.parameters.memstash-token>>" --request GET https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID})
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
@@ -220,7 +225,8 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: ansible/ansible-runner:latest
+      #- image: ansible/ansible-runner:latest
+      - image: python:3.7-alpine3.11
     steps:
       # Checkout code from git
       - checkout
