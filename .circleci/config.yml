@@ -162,23 +162,23 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople \
-              --stack-name "back-end-udapeople-<<pipeline.parameters.workflow_id>>" \
-              --parameter-overrides ID="<<pipeline.parameters.workflow_id>>"  
+              --stack-name "back-end-udapeople-<< pipeline.parameters.workflow_id >>" \
+              --parameter-overrides ID="<< pipeline.parameters.workflow_id >>"  
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=udapeople \
-              --stack-name "front-end-udapeople-<<pipeline.parameters.workflow_id>>" \
-              --parameter-overrides ID="<<pipeline.parameters.workflow_id>>"  
+              --stack-name "front-end-udapeople-<< pipeline.parameters.workflow_id >>" \
+              --parameter-overrides ID="<< pipeline.parameters.workflow_id >>"  
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             # Your code here
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=back-end-udapeople-<<pipeline.parameters.workflow_id>>" \
+              --filters "Name=tag:Name,Values=back-end-udapeople-<< pipeline.parameters.workflow_id >>" \
               --output text >> .circleci/ansible/inventory.txt
 
       - run:
@@ -186,13 +186,13 @@ jobs:
           command: |
             BACK_END_AWS_DNS=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PrivateDnsName' \
-              --filters "Name=tag:Name,Values=back-end-udapeople-<<pipeline.parameters.workflow_id>>"  \
+              --filters "Name=tag:Name,Values=back-end-udapeople-<< pipeline.parameters.workflow_id >>"  \
               --output text )
 
             curl -H "Content-Type: text/plain" \
               -H "token: <<pipeline.parameters.memstash-token>>" \
               --request PUT --data "$BACK_END_AWS_DNS" \
-              https://api.memstash.io/values/backend-dns-<<pipeline.parameters.workflow_id>>
+              https://api.memstash.io/values/backend-dns-<< pipeline.parameters.workflow_id >>
 
       - persist_to_workspace:
           root: ~/
