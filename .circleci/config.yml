@@ -22,10 +22,10 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            echo "Destroying environment: <<pipeline.parameters.workflow_id>> "
-            aws cloudformation delete-stack --stack-name back-end-udapeople-<<pipeline.parameters.workflow_id>>
-            aws s3 rm s3://udapeople-prod-<<pipeline.parameters.workflow_id>> --recursive
-            aws cloudformation delete-stack --stack-name front-end-udapeople-<<pipeline.parameters.workflow_id>>
+            echo "Destroying environment: nom56l897kstv "
+            aws cloudformation delete-stack --stack-name back-end-udapeople-nom56l897kstv
+            aws s3 rm s3://udapeople-prod-nom56l897kstv --recursive
+            aws cloudformation delete-stack --stack-name front-end-udapeople-nom56l897kstv
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -37,7 +37,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = curl -H "token: <<pipeline.parameters.memstash-token>>" --request GET https://api.memstash.io/values/migration-<<pipeline.parameters.workflow_id>>
+            SUCCESS = curl -H "token: <<pipeline.parameters.memstash-token>>" --request GET https://api.memstash.io/values/migration-nom56l897kstv
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
@@ -252,7 +252,7 @@ jobs:
               curl -H "Content-Type: text/plain" \
               -H "token: <<pipeline.parameters.memstash-token>>"\
               --request PUT --data "1" \
-              https://api.memstash.io/values/migration-<<pipeline.parameters.workflow_id>>
+              https://api.memstash.io/values/migration-nom56l897kstv
      # Here's where you will add some code to rollback on failure
       - destroy-environment   
       - revert-migrations      
@@ -288,7 +288,7 @@ jobs:
       - run: 
           name: Copy built frontend files to the S3 bucket
           command: |
-            aws s3 cp ./frontend/dist s3://udapeople-<<pipeline.parameters.workflow_id>>/ --recursive
+            aws s3 cp ./frontend/dist s3://udapeople-nom56l897kstv/ --recursive
       # Here's where you will add some code to rollback on failure
       - destroy-environment 
       - revert-migrations     
@@ -317,7 +317,7 @@ jobs:
             # your code here
             cd backend
             npm run backend
-            aws s3 cp ./backend/dist s3://udapeople-<<pipeline.parameters.workflow_id>>/ --recursive
+            aws s3 cp ./backend/dist s3://udapeople-nom56l897kstv/ --recursive
       # Here's where you will add some code to rollback on failure 
       - destroy-environment 
       - revert-migrations
@@ -352,7 +352,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-            URL="http://udapeople-<<pipeline.parameters.workflow_id>>s3-website.us-east-1.amazonaws.com/#/employees"
+            URL="http://udapeople-nom56l897kstv.s3-website.us-east-1.amazonaws.com/#/employees"
             if curl -s ${URL} | grep "Welcome"
             then
               return 0
@@ -383,7 +383,7 @@ jobs:
               --template-file .circleci/files/cloudfront.yml \
               --tags project=udapeople \
               --stack-name "front-end-udapeople-cgjerstad" \
-              --parameter-overrides ID="<<pipeline.parameters.workflow_id>>"  
+              --parameter-overrides ID="nom56l897kstv"  
       # Here's where you will add some code to rollback on failure
       - destroy-environment 
       - revert-migrations  
