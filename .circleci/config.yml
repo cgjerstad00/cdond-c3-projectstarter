@@ -1,9 +1,6 @@
 version: 2.1
 
 parameters:
-  workflow-id:
-    type: string
-    default: "nom56l897kstv"
   memstash-token:
     type: string
     default: "d8a87e63-bb9d-43af-91e1-8145d5d56b0f"
@@ -22,10 +19,10 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            echo "Destroying environment: nom56l897kstv "
-            aws cloudformation delete-stack --stack-name back-end-udapeople-nom56l897kstv
-            aws s3 rm s3://udapeople-prod-nom56l897kstv --recursive
-            aws cloudformation delete-stack --stack-name front-end-udapeople-nom56l897kstv
+            echo "Destroying environment: ${CIRCLE_WORKFLOW_ID} "
+            aws cloudformation delete-stack --stack-name back-end-udapeople-${CIRCLE_WORKFLOW_ID}
+            aws s3 rm s3://udapeople-prod-${CIRCLE_WORKFLOW_ID} --recursive
+            aws cloudformation delete-stack --stack-name front-end-udapeople-${CIRCLE_WORKFLOW_ID}
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -37,7 +34,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = curl -H "token: <<pipeline.parameters.memstash-token>>" --request GET https://api.memstash.io/values/migration-nom56l897kstv
+            SUCCESS = curl -H "token: <<pipeline.parameters.memstash-token>>" --request GET https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID}
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
@@ -168,23 +165,23 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople \
-              --stack-name "back-end-udapeople-nom56l897kstv" \
-              --parameter-overrides ID="nom56l897kstv"  
+              --stack-name "back-end-udapeople-${CIRCLE_WORKFLOW_ID}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"  
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=udapeople \
-              --stack-name "front-end-udapeople-nom56l897kstv" \
-              --parameter-overrides ID="nom56l897kstv"  
+              --stack-name "front-end-udapeople-${CIRCLE_WORKFLOW_ID}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"  
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             # Your code here
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=back-end-udapeople-nom56l897kstv" \
+              --filters "Name=tag:Name,Values=back-end-udapeople-${CIRCLE_WORKFLOW_ID}" \
               --output text >> .circleci/ansible/inventory.txt
 
       - run:
@@ -192,13 +189,13 @@ jobs:
           command: |
             BACK_END_AWS_DNS=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PrivateDnsName' \
-              --filters "Name=tag:Name,Values=back-end-udapeople-nom56l897kstv"  \
+              --filters "Name=tag:Name,Values=back-end-udapeople-${CIRCLE_WORKFLOW_ID}"  \
               --output text )
 
             curl -H "Content-Type: text/plain" \
               -H "token: <<pipeline.parameters.memstash-token>>" \
               --request PUT --data "$BACK_END_AWS_DNS" \
-              https://api.memstash.io/values/backend-dns-nom56l897kstv
+              https://api.memstash.io/values/backend-dns-${CIRCLE_WORKFLOW_ID}
 
       - persist_to_workspace:
           root: ~/
@@ -206,7 +203,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment   
-      - revert-migrations
+
   
 
   configure-infrastructure:
@@ -258,7 +255,7 @@ jobs:
               curl -H "Content-Type: text/plain" \
               -H "token: <<pipeline.parameters.memstash-token>>"\
               --request PUT --data "1" \
-              https://api.memstash.io/values/migration-nom56l897kstv
+              https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID}
      # Here's where you will add some code to rollback on failure
       - destroy-environment   
       - revert-migrations      
@@ -294,7 +291,7 @@ jobs:
       - run: 
           name: Copy built frontend files to the S3 bucket
           command: |
-            aws s3 cp ./frontend/dist s3://udapeople-nom56l897kstv/ --recursive
+            aws s3 cp ./frontend/dist s3://udapeople-${CIRCLE_WORKFLOW_ID}/ --recursive
       # Here's where you will add some code to rollback on failure
       - destroy-environment 
       - revert-migrations     
@@ -323,7 +320,7 @@ jobs:
             # your code here
             cd backend
             npm run backend
-            aws s3 cp ./backend/dist s3://udapeople-nom56l897kstv/ --recursive
+            aws s3 cp ./backend/dist s3://udapeople-${CIRCLE_WORKFLOW_ID}/ --recursive
       # Here's where you will add some code to rollback on failure 
       - destroy-environment 
       - revert-migrations
@@ -358,7 +355,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-            URL="http://udapeople-nom56l897kstv.s3-website.us-east-1.amazonaws.com/#/employees"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website.us-east-1.amazonaws.com/#/employees"
             if curl -s ${URL} | grep "Welcome"
             then
               return 0
@@ -389,7 +386,7 @@ jobs:
               --template-file .circleci/files/cloudfront.yml \
               --tags project=udapeople \
               --stack-name "front-end-udapeople-cgjerstad" \
-              --parameter-overrides ID="nom56l897kstv"  
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"  
       # Here's where you will add some code to rollback on failure
       - destroy-environment 
       - revert-migrations  
