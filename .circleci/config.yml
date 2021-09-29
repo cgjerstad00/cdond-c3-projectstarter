@@ -207,7 +207,7 @@ jobs:
               --stack-name "front-end-udapeople-${CIRCLE_WORKFLOW_ID}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"  
       - run:
-          name: Add back-end ip to ansible inventory
+          name: Add back-end DNS to ansible inventory
           command: |
             # Your code here
             BACKEND_IP=$(aws ec2 describe-instances \
@@ -215,7 +215,8 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
               --output text) 
             echo "$BACKEND_DNS" >> .circleci/ansible/inventory.txt
-            echo $BACKEND_DNS
+            cat $BACKEND_DNS
+            cat .circleci/ansible/inventory.txt
       - run:
           name: Add back-end DNS to memstash
           command: |
@@ -228,6 +229,8 @@ jobs:
               -H "token: <<pipeline.parameters.memstash-token>>" \
               --request PUT --data "$BACK_END_AWS_DNS" \
               https://api.memstash.io/values/backend-dns-${CIRCLE_WORKFLOW_ID}
+
+            exit 1
 
       - persist_to_workspace:
           root: ~/
