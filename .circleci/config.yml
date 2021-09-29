@@ -15,11 +15,11 @@ commands:
     #parameters:
       # Add parameter here   
     steps:
-      - run:
-          name: Install AWS CLI for rollback
-          when: on_fail
-          command: |
-            apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
+      #- run:
+      #    name: Install AWS CLI for rollback
+      #    when: on_fail
+      #    command: |
+      #      apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
       - run:
           name: Destroy frontend environments
           when: on_fail
@@ -40,11 +40,11 @@ commands:
     #parameters:
       # Add parameter here     
     steps:
-      - run:
-          name: Install curl
-          when: on_fail
-          command: |
-            apk add --no-cache curl
+      #- run:
+      #    name: Install curl
+      #    when: on_fail
+      #    command: |
+      #      apk add --no-cache curl
       - run:
           name: Revert migrations
           when: on_fail
