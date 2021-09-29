@@ -395,6 +395,7 @@ jobs:
           command: |
             # your code here
             export BACKEND_IP=$(sed -n 2p .circleci/ansible/inventory.txt)
+            echo http://${BACKEND_IP}:3030/api/status
             if curl -s http://${BACKEND_IP}:3030/api/status
             then
               return 0
