@@ -210,7 +210,7 @@ jobs:
           name: Add back-end DNS to ansible inventory
           command: |
             # Your code here
-            BACKEND_IP=$(aws ec2 describe-instances \
+            BACKEND_DNS=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicDnsName' \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
               --output text) 
