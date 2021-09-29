@@ -215,8 +215,7 @@ jobs:
               --filters "Name=tag:Name,Values=back-end-udapeople-${CIRCLE_WORKFLOW_ID}" \
               --output text) 
             echo "$BACKEND_IP" >> .circleci/ansible/inventory.txt
-            echo .circleci/ansible/inventory.txt
-
+            echo "$BACKEND_IP"
       - run:
           name: Add back-end DNS to memstash
           command: |
@@ -229,6 +228,8 @@ jobs:
               -H "token: <<pipeline.parameters.memstash-token>>" \
               --request PUT --data "$BACK_END_AWS_DNS" \
               https://api.memstash.io/values/backend-dns-${CIRCLE_WORKFLOW_ID}
+
+            exit 1
 
       - persist_to_workspace:
           root: ~/
