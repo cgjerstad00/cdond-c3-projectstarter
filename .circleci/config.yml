@@ -262,7 +262,6 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - aws-cli/setup
       # attach workspace
       - attach_workspace:
           at: ~/
@@ -284,6 +283,7 @@ jobs:
               -H "token: <<pipeline.parameters.memstash-token>>"\
               --request PUT --data "1" \
               https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID}
+            fi
      # Here's where you will add some code to rollback on failure
       - destroy-environment   
       - revert-migrations      
