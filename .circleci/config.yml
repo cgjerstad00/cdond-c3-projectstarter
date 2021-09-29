@@ -258,7 +258,7 @@ jobs:
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
-      - image: nodejscn/node:latest
+      - image: nodejscn/node
     steps:
       # Checkout code from git
       - checkout
@@ -270,7 +270,7 @@ jobs:
           command: |
             # Your code  here
             cd backend
-            npm run migrations >> migration_output.txt
+            sudo npm run migrations >> migration_output.txt
       - run:
           name: Send migration results to memstash
           command: |
