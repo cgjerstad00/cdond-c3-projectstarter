@@ -141,6 +141,12 @@ jobs:
           keys: [frontend-build]
       # Your job code here
       - run:
+          name: Install dependencies
+          command: |
+             # Your code here
+             cd frontend
+             npm install
+      - run:
           name: front-end scan
           command: |
              # Your code here
@@ -158,6 +164,12 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       # Your job code here
+      - run:
+          name: Install dependencies
+          command: |
+             # Your code here
+             cd backend
+             npm install
       - run:
           name: Back-end scan
           command: |
