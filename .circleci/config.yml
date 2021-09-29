@@ -142,9 +142,9 @@ jobs:
       # Your job code here
       - run:
           name: Install dependencies
-          command:
+          command: |
              # Your code here
-             #cd frontend
+             cd frontend
              npm install
       - run:
           name: front-end scan
@@ -152,7 +152,7 @@ jobs:
              # Your code here
              cd frontend
              npm audit fix --audit-level=critical --force
-             #npm audit --audit-level=critical
+             npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -166,7 +166,7 @@ jobs:
       # Your job code here
       - run:
           name: Install dependencies
-          command:
+          command: |
              # Your code here
              cd backend
              npm install
@@ -176,7 +176,7 @@ jobs:
              # Your code here
              cd backend
              npm audit fix --audit-level=critical --force
-             #npm audit --audit-level=critical
+             npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
