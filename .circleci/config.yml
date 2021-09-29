@@ -108,7 +108,7 @@ jobs:
           name: front-end test
           command: |
              # Your code here
-             cd backend
+             cd frontend
              npm install
              npm run test
                 
@@ -200,10 +200,12 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             # Your code here
-            aws ec2 describe-instances \
+            BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=back-end-udapeople-${CIRCLE_WORKFLOW_ID}" \
-              --output text >> .circleci/ansible/inventory.txt
+              --output text) 
+            echo "$BACKEND_IP" >> .circleci/ansible/inventory.txt
+            echo .circleci/ansible/inventory.txt
 
       - run:
           name: Add back-end DNS to memstash
@@ -288,38 +290,6 @@ jobs:
       - destroy-environment   
       - revert-migrations      
 
-  deploy-backend:
-    docker:
-      # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
-    steps:
-      # Checkout code from git
-      - checkout
-      # Add ssh keys with fingerprint
-      - add_ssh_keys:
-          fingerprints: ["c2:20:71:c5:cf:21:35:0c:21:77:e3:42:19:64:74:b6:76:a1:80:ac"]
-      # attach workspace
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache curl
-            apk add --no-cache --upgrade bash
-            apk add --no-cache --update npm
-            pip3 install awscli
-      - run:
-          name: Deploy backend
-          command: |
-            # your code here
-            cd backend
-            npm i
-            npm run build
-            aws s3 cp ./backend/dist s3://udapeople-${CIRCLE_WORKFLOW_ID}/ --recursive
-      # Here's where you will add some code to rollback on failure 
-      - destroy-environment 
-      - revert-migrations
-
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
@@ -358,8 +328,39 @@ jobs:
       # Here's where you will add some code to rollback on failure
       - destroy-environment 
       - revert-migrations     
+
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.11
+    steps:
+      # Checkout code from git
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ["c2:20:71:c5:cf:21:35:0c:21:77:e3:42:19:64:74:b6:76:a1:80:ac"]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache curl
+            apk add --no-cache --upgrade bash
+            apk add --no-cache --update npm
+            pip3 install awscli
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
+            cd backend
+            npm i
+            npm run build
+            aws s3 cp ./backend/dist s3://udapeople-${CIRCLE_WORKFLOW_ID}/ --recursive
+      # Here's where you will add some code to rollback on failure 
+      - destroy-environment 
+      - revert-migrations
                     
-  
   smoke-test:
     docker:
       # Lightweight Docker image 
