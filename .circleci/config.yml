@@ -123,10 +123,10 @@ jobs:
           keys: [backend-build]
       # Your job code here
       - run:
-          name: Back-end test
+          name: back-end test
           command: |
              # Your code here
-             #cd backend
+             cd backend
              npm install
              npm run test
             
@@ -140,12 +140,6 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       # Your job code here
-      - run:
-          name: Install dependencies
-          command: |
-             # Your code here
-             cd frontend
-             npm install
       - run:
           name: front-end scan
           command: |
@@ -164,12 +158,6 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       # Your job code here
-      - run:
-          name: Install dependencies
-          command: |
-             # Your code here
-             cd backend
-             npm install
       - run:
           name: Back-end scan
           command: |
