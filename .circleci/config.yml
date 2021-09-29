@@ -300,7 +300,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            yum -y install tar gzip
+            apk add --update curl tar
             apk add --update ansible
       - run:
           name: Get backend url
@@ -340,7 +340,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            yum -y install tar gzip
+            apk add --update curl tar
             apk add --update ansible
       - run:
           name: Deploy backend
