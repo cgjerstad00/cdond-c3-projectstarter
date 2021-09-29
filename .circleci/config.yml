@@ -143,8 +143,9 @@ jobs:
       - run:
           name: Install dependencies
           command:
-            cd backend
-            npm i
+            # Your code here
+            cd frontend
+            npm install
       - run:
           name: front-end scan
           command: |
@@ -166,8 +167,9 @@ jobs:
       - run:
           name: Install dependencies
           command:
+            # Your code here
             cd backend
-            npm i
+            npm install
       - run:
           name: Back-end scan
           command: |
