@@ -289,7 +289,7 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: amazon/aws-cli:lates
+      - image: amazon/aws-cli:latest
     steps:
       # Checkout code from git
       - checkout
@@ -300,6 +300,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
+            yum -y install tar gzip
             apk add --update ansible
       - run:
           name: Get backend url
@@ -339,6 +340,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
+            yum -y install tar gzip
             apk add --update ansible
       - run:
           name: Deploy backend
