@@ -262,6 +262,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - aws-cli/setup
       # attach workspace
       - attach_workspace:
           at: ~/
