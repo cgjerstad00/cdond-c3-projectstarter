@@ -310,8 +310,6 @@ jobs:
       # attach workspace
       - attach_workspace:
           at: ~/
-      - restore_cache:
-          keys: ["backend-dist"]
       - run:
           name: Install dependencies
           command: |
@@ -361,16 +359,18 @@ jobs:
             apk add --no-cache --upgrade bash
             apk add --no-cache --update npm
             apk add --update ansible tar gzip
+      - restore_cache:
+          keys: ["backend-build"]
       - run:
           name: Deploy backend
           command: |
             # your code here
-            cd backend
-            npm i
-            npm run build
-            cd ..
-            tar czf backend.tar.gz -P /backend/dist
-            cd ..
+            #cd backend
+            #npm i
+            #npm run build
+            cd /home
+            tar czf backend.tar.gz -P /home/circleci/project/backend/dist
+            #cd ..
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
       - destroy-environment 
