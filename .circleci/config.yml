@@ -396,23 +396,23 @@ jobs:
             apk add --no-cache openssh-client
             pip3 install awscli
       - run:
-          name: Backend smoke test.
+          name: Frontend smoke test.
           command: |
             # your code here
-            export BACKEND_DNS=$(sed -n 2p .circleci/ansible/inventory.txt)
-            echo http://${BACKEND_DNS}:3030/api/status
-            if curl -s http://${BACKEND_DNS}:3030/api/status
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website.us-east-1.amazonaws.com/#/employees"
+            if curl -s ${URL} | grep "Welcome"
             then
               return 0
             else
               return 1
             fi
       - run:
-          name: Frontend smoke test.
+          name: Backend smoke test.
           command: |
             # your code here
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website.us-east-1.amazonaws.com/#/employees"
-            if curl -s ${URL} | grep "Welcome"
+            export BACKEND_DNS=$(sed -n 2p .circleci/ansible/inventory.txt)
+            echo http://${BACKEND_DNS}:3030/api/status
+            if curl -s http://${BACKEND_DNS}:3030/api/status
             then
               return 0
             else
