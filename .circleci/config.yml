@@ -418,13 +418,9 @@ jobs:
             else
               return 1
             fi
-      - run:
-          name: exit test
-          command:
-            exit 1
       # Here's where you will add some code to rollback on failure
-      - destroy-environment 
-      - revert-migrations  
+      #- destroy-environment 
+      #- revert-migrations  
 
   cloudfront-update:
     docker:
