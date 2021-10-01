@@ -359,18 +359,18 @@ jobs:
             apk add --no-cache --upgrade bash
             apk add --no-cache --update npm
             apk add --update ansible tar gzip
+            pip3 install awscli
       - restore_cache:
           keys: ["backend-dist"]
       - run:
-          name: Deploy backend
+          name: Prep backend Dist
           command: |
             # your code here
-            #cd backend
-            #npm i
-            #npm run build
             cd /home
             tar czf backend.tar.gz -P /home/circleci/project/backend/dist
-            #cd ..
+      - run:
+          name: run deploy
+          command:
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
       - destroy-environment 
