@@ -91,8 +91,8 @@ jobs:
              npm install
              npm run build
       - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
+          paths: [backend/dist]
+          key: backend-dist
 
   test-frontend:
     docker:
@@ -360,7 +360,7 @@ jobs:
             apk add --no-cache --update npm
             apk add --update ansible tar gzip
       - restore_cache:
-          keys: ["backend-build"]
+          keys: ["backend-dist"]
       - run:
           name: Deploy backend
           command: |
