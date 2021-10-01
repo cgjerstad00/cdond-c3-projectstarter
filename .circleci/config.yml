@@ -318,16 +318,12 @@ jobs:
             apk add --no-cache --update npm
             pip3 install awscli
       - run:
-          name: Get backend url
+          name: Deploy frontend objects
           command: |
             # your code here
             export BACKEND_IP=$(sed -n 2p .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-      - run:
-          name: Deploy frontend objects
-          command: |
-            # your code here
             cd frontend
             npm i
             npm run build
