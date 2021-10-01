@@ -358,7 +358,6 @@ jobs:
             pip3 install awscli
       - restore_cache:
           keys: ["backend-dist"]    
-          
       - run:
           name: Prep backend Dist
           command: |
@@ -431,8 +430,8 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure
-      - destroy-environment 
-      - revert-migrations  
+      #- destroy-environment 
+      #- revert-migrations  
 
   cloudfront-update:
     docker:
