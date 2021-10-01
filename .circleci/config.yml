@@ -373,7 +373,7 @@ jobs:
               --output text )
             echo ${BACK_END_AWS_IP}
             cat .circleci/ansible/inventory.txt
-            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
       - destroy-environment 
       - revert-migrations
