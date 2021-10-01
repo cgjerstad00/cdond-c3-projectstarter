@@ -368,7 +368,7 @@ jobs:
             cd backend
             npm i
             npm run build
-            tar czf backend.tar.gz -P ./backend/dist
+            tar czf backend.tar.gz -P ./dist
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
       - destroy-environment 
