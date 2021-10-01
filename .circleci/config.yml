@@ -361,7 +361,7 @@ jobs:
             apk add --update ansible tar gzip
             pip3 install awscli
       - restore_cache:
-          keys: ["backend-dist"]
+          keys: ["backend-dist"]    
       - run:
           name: Prep backend Dist
           command: |
@@ -370,7 +370,13 @@ jobs:
             tar czf backend.tar.gz -P /home/circleci/project/backend/dist
       - run:
           name: run deploy
-          command:
+          command: |
+            BACK_END_AWS_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}"  \
+              --output text )
+            echo ${BACK_END_AWS_IP}
+            cat .circleci/ansible/inventory.txt
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
       - destroy-environment 
@@ -407,12 +413,21 @@ jobs:
               return 1
             fi
       - run:
+          name: get backend BACKEND-ip
+          command: |
+            BACK_END_AWS_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}"  \
+              --output text )
+            echo ${BACK_END_AWS_IP}
+      - run:
           name: Backend smoke test.
           command: |
             # your code here
             export BACKEND_DNS=$(sed -n 2p .circleci/ansible/inventory.txt)
             echo http://${BACKEND_DNS}:3030/api/status
-            if curl -s http://${BACKEND_DNS}:3030/api/status
+            curl http://${BACKEND_DNS}:3030/api/status
+            if curl http://${BACKEND_DNS}:3030/api/status
             then
               return 0
             else
