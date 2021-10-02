@@ -427,7 +427,7 @@ jobs:
             curl http://${BACKEND_DNS}:3030/api/status
             if curl http://${BACKEND_DNS}:3030/api/status
             then
-              return 1
+              return 0
             else
               return 1
             fi
