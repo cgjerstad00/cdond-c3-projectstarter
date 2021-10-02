@@ -363,7 +363,7 @@ jobs:
           command: |
             # your code here
             cd /home
-            tar czf backend.tar.gz -P /home/circleci/project/backend/dist
+            tar czf backend.tar.gz -P /home/circleci/project/backend/
       - run:
           name: run deploy
           command: |
@@ -430,7 +430,7 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure
-      
+
       #- destroy-environment 
       #- revert-migrations  
 
