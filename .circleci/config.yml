@@ -354,16 +354,9 @@ jobs:
             apk add --no-cache curl
             apk add --no-cache --upgrade bash
             apk add --no-cache --update npm
-            apk add --update ansible tar gzip
             pip3 install awscli
       - restore_cache:
           keys: ["backend-dist"]    
-      - run:
-          name: Prep backend Dist
-          command: |
-            # your code here
-            cd /home
-            tar czf backend.tar.gz -P /home/circleci/project/backend/
       - run:
           name: run deploy
           command: |
