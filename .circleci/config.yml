@@ -475,7 +475,7 @@ jobs:
               export OldWorkflowID=$(aws cloudformation \
                   list-exports --query "Exports[?Name==\`${CIRCLE_WORKFLOW_ID}\`].Value" \
                   --no-paginate --output text)
-              echo OldWorkflowID
+              echo ${OldWorkflowID}
               export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
                   --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
 
