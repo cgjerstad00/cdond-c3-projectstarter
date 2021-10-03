@@ -1,0 +1,5 @@
+[URL01] - https://github.com/cgjerstad00/cdond-c3-projectstarter
+[URL02] - s3://udapeople-cec98aa1-2659-447f-a0f1-5e1e5f9b8a7e
+[URL03] - http://udapeople-cec98aa1-2659-447f-a0f1-5e1e5f9b8a7e.s3-website.us-east-1.amazonaws.com
+[URL04] - http://ec2-52-90-196-49.compute-1.amazonaws.com:3030/api/status
+[URL05] - http://ec2-54-204-117-197.compute-1.amazonaws.com:9090/targets
