@@ -1,5 +1,6 @@
 [URL01] - https://github.com/cgjerstad00/cdond-c3-projectstarter
-[URL02] - s3://udapeople-cec98aa1-2659-447f-a0f1-5e1e5f9b8a7e
-[URL03] - http://udapeople-cec98aa1-2659-447f-a0f1-5e1e5f9b8a7e.s3-website.us-east-1.amazonaws.com
+[URL02] - http://udapeople-2f1d0df3-d461-460d-93b7-ca4df72011c7.s3-website-us-east-1.amazonaws.com/#/employees
+[URL03] - https://dplcqczoz74e0.cloudfront.net/#/employees
 [URL04] - http://ec2-52-90-196-49.compute-1.amazonaws.com:3030/api/status
-[URL05] - http://ec2-54-204-117-197.compute-1.amazonaws.com:9090/targets
+[URL05] - http://ec2-3-90-64-185.compute-1.amazonaws.com:9090/targets 
+( Not sure why but AWS keeps changeing my DNS for this )
